@@ -13,6 +13,7 @@ import {
 import styles from "./Main.module.scss";
 import PokemonList from "../../data/pokemondata.json";
 import axios from "../../axios.config";
+import PokemonCard from "../../components/PokemonCard/PokemonCard";
 
 const Main: React.FC = () => {
   const [searchInput, setSearchInput] = React.useState<string>("");
@@ -56,15 +57,15 @@ const Main: React.FC = () => {
     const fetchPokeData = async () => {
       try {
         const {
-          data: { results },
+          data: { results, count },
         } = await axios.get("?limit=10&offset=0");
-        const resultData = await Promise.all(
+        const resultData: any[] = await Promise.all(
           results.map(async (_: any, index: number) =>
             axios.get("/" + (index + 1 + (pageData.currPage - 1) * 10) + "/")
           )
         );
-        console.log(resultData);
-        setResultData(results);
+        setResultData(resultData as []);
+        setPageData((prev) => ({ ...prev, totalPage: Math.round(count / 10) }));
         toast.closeAll();
       } catch (err) {
         console.log(err);
@@ -132,7 +133,21 @@ const Main: React.FC = () => {
           <></>
         )}
       </section>
-      <section className={styles.PokemonContainer}></section>
+      {resultData.length > 0 ? (
+        <section className={styles.PokemonContainer}>
+          {resultData.map((item: any, index) => (
+            <PokemonCard
+              key={index}
+              index={item.id}
+              height={item.data.height}
+              weight={item.data.weight}
+              image={item.data.sprites.front_default}
+            />
+          ))}
+        </section>
+      ) : (
+        <></>
+      )}
       <section className={styles.PaginationContainer}>
         <button className={styles.PageButton}> Prev </button>
         <p>
