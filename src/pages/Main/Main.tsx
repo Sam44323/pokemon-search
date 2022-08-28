@@ -14,6 +14,7 @@ import styles from "./Main.module.scss";
 import PokemonList from "../../data/pokemondata.json";
 import axios from "../../axios.config";
 import PokemonCard from "../../components/PokemonCard/PokemonCard";
+import { AxiosResponse } from "axios";
 
 const Main: React.FC = () => {
   const [searchInput, setSearchInput] = React.useState<string>("");
@@ -47,6 +48,31 @@ const Main: React.FC = () => {
     setSuggestionLoader(false);
   };
 
+  const fetchPokeData = async () => {
+    try {
+      const {
+        data: { results, count },
+      } = await axios.get("?limit=10&offset=0");
+      const resultData: any[] = await Promise.all(
+        results.map(async (_: any, index: number) =>
+          axios.get("/" + (index + 1 + (pageData.currPage - 1) * 10) + "/")
+        )
+      );
+      setResultData(resultData as []);
+      setPageData((prev) => ({ ...prev, totalPage: Math.round(count / 10) }));
+      toast.closeAll();
+    } catch (err) {
+      console.log(err);
+      toast.closeAll();
+      toast({
+        title: "Error while fetching data, please try again!",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   React.useEffect(() => {
     toast({
       title: "Fetching all the pokemon datas!",
@@ -54,36 +80,12 @@ const Main: React.FC = () => {
       position: "top",
       isClosable: true,
     });
-    const fetchPokeData = async () => {
-      try {
-        const {
-          data: { results, count },
-        } = await axios.get("?limit=10&offset=0");
-        const resultData: any[] = await Promise.all(
-          results.map(async (_: any, index: number) =>
-            axios.get("/" + (index + 1 + (pageData.currPage - 1) * 10) + "/")
-          )
-        );
-        setResultData(resultData as []);
-        setPageData((prev) => ({ ...prev, totalPage: Math.round(count / 10) }));
-        toast.closeAll();
-      } catch (err) {
-        console.log(err);
-        toast.closeAll();
-        toast({
-          title: "Error while fetching data, please try again!",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    };
     fetchPokeData();
   }, []);
 
   console.log(resultData);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (searchInput === "") {
       toast({
         title: "Please enter a valid pokemon name",
@@ -91,8 +93,33 @@ const Main: React.FC = () => {
         duration: 9000,
         isClosable: true,
       });
+      fetchPokeData();
+      return;
+    }
+    try {
+      toast({
+        title: "Fetching the data...",
+        status: "loading",
+        isClosable: true,
+      });
+      const result: AxiosResponse = await axios.get(
+        `${searchInput.toLowerCase()}`
+      );
+      setResultData([result] as any);
+      setPageData({ currPage: 1, totalPage: 1 });
+      toast.closeAll();
+    } catch (err) {
+      console.log(err);
+      toast({
+        title: "Error while fetching data, please try again!",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
+
+  console.log(resultData);
 
   return (
     <div className={styles.MainContainer}>
