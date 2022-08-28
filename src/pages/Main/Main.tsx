@@ -15,11 +15,15 @@ import PokemonList from "../../data/pokemondata.json";
 
 const Main: React.FC = () => {
   const [searchInput, setSearchInput] = React.useState<string>("");
+  const [suggestionLoader, setSuggestionLoader] =
+    React.useState<boolean>(false);
+  const toast = useToast();
   const [suggestedData, setSuggestedData] = React.useState<
     { name: string; url: string }[]
   >([]);
 
   const handleSearchInput = (value: string) => {
+    setSuggestionLoader(true);
     setSearchInput(value);
     let filteredData: { name: string; url: string }[] = [];
     if (value === "") {
@@ -30,6 +34,7 @@ const Main: React.FC = () => {
       );
     }
     setSuggestedData(filteredData);
+    setSuggestionLoader(false);
   };
 
   const handleSearch = () => {};
@@ -58,6 +63,7 @@ const Main: React.FC = () => {
         </div>
         {suggestedData.length > 0 && (
           <div className={styles.SuggestionModals}>
+            {suggestionLoader && <Spinner color="white" />}
             {suggestedData.map((item, index) => (
               <p
                 key={index}
