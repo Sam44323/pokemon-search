@@ -1,0 +1,67 @@
+.PokemonContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 90px;
+  .RootData {
+    margin-bottom: 30px;
+    .ImageContainer {
+      display: flex;
+      justify-content: center;
+      background-color: rgb(219, 217, 217);
+      width: fit-content;
+      margin: 0 auto;
+      border-radius: 30px;
+      margin-bottom: 10px;
+      img {
+        height: 310px;
+        width: 390px;
+      }
+    }
+
+    .Data {
+      h1 {
+        font-weight: bold;
+        font-size: 30px;
+        text-transform: capitalize;
+      }
+      div {
+        display: flex;
+        justify-content: space-between;
+        max-width: 400px;
+        margin: 0 auto;
+        p {
+          font-size: 19px;
+          font-weight: bold;
+          background-color: rgb(210, 210, 210);
+          padding: 10px 10px;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+  .ListData {
+    h1 {
+      background-color: black;
+      color: #fff;
+      max-width: 400px;
+      margin: 10px auto;
+      border-radius: 10px;
+      padding: 10px 0;
+      font-size: 19px;
+      font-weight: bold;
+    }
+    div {
+      background-color: rgb(210, 210, 210);
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 10px 0;
+      p {
+        font-size: 19px;
+        font-weight: bold;
+        margin: 10px 0;
+        text-transform: capitalize;
+      }
+    }
+  }
+}

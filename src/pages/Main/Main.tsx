@@ -84,8 +84,6 @@ const Main: React.FC = () => {
     fetchPokeData();
   }, [pageData.currPage]);
 
-  console.log(resultData);
-
   const handleSearch = async () => {
     if (searchInput === "") {
       fetchPokeData();
@@ -177,7 +175,7 @@ const Main: React.FC = () => {
               index={item.data.id}
               name={item.data.name}
               image={item.data.sprites.front_default}
-              clickHandler={() => navigate(`/pokemon/${item.data.id}`)}
+              clickHandler={() => navigate(`/pokemon/${item.data.name}`)}
             />
           ))}
         </section>
