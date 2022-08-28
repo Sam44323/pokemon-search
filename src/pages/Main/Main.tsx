@@ -24,7 +24,7 @@ const Main: React.FC = () => {
           <InputLeftElement pointerEvents="none" children={<BsSearch />} />
           <Input
             type="text"
-            placeholder="news title"
+            placeholder="pokemon name"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
