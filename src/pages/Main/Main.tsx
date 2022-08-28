@@ -1,5 +1,5 @@
 import React from "react";
-import { useRoutes } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import {
   Button,
@@ -17,6 +17,7 @@ import PokemonCard from "../../components/PokemonCard/PokemonCard";
 import { AxiosResponse } from "axios";
 
 const Main: React.FC = () => {
+  const navigate = useNavigate();
   const [searchInput, setSearchInput] = React.useState<string>("");
   const [resultData, setResultData] = React.useState<[]>([]);
   const [pageData, setPageData] = React.useState<{
@@ -176,6 +177,7 @@ const Main: React.FC = () => {
               index={item.data.id}
               name={item.data.name}
               image={item.data.sprites.front_default}
+              clickHandler={() => navigate(`/pokemon/${item.data.id}`)}
             />
           ))}
         </section>

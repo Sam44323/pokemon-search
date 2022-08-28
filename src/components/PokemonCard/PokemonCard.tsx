@@ -5,11 +5,12 @@ interface PokemonCardProps {
   image: string;
   index: number;
   name: string;
+  clickHandler: () => void;
 }
 
 const PokemonCard: React.FC<PokemonCardProps> = (props) => {
   return (
-    <div className={styles.PokemonCardContainer}>
+    <div className={styles.PokemonCardContainer} onClick={props.clickHandler}>
       <section className={styles.ImageContainer}>
         <img src={props.image} alt={`${props.index}`} />
       </section>
