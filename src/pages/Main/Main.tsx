@@ -81,6 +81,8 @@ const Main: React.FC = () => {
     fetchPokeData();
   }, []);
 
+  console.log(resultData);
+
   const handleSearch = () => {
     if (searchInput === "") {
       toast({
@@ -138,9 +140,8 @@ const Main: React.FC = () => {
           {resultData.map((item: any, index) => (
             <PokemonCard
               key={index}
-              index={item.id}
-              height={item.data.height}
-              weight={item.data.weight}
+              index={item.data.id}
+              name={item.data.name}
               image={item.data.sprites.front_default}
             />
           ))}
