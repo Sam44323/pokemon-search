@@ -1,11 +1,38 @@
 .MainContainer {
   .SearchContainer {
-    display: flex;
+    position: relative;
     max-width: 600px;
     margin: 0 auto;
-    margin-top: 30px;
-    .Button {
-      margin-left: 15px;
+    .Inputs {
+      display: flex;
+      margin-top: 30px;
+      .Button {
+        margin-left: 15px;
+      }
+    }
+
+    .SuggestionModals {
+      position: absolute;
+      // left: 50%;
+      background-color: #8b8686;
+      width: 85%;
+      border-radius: 5px 5px 10px 10px;
+      margin-top: 10px;
+      padding: 10px 10px;
+      max-height: 180px;
+      overflow: scroll;
+      p {
+        padding: 10px 5px;
+        text-transform: capitalize;
+        font-weight: bold;
+        font-size: 15px;
+        color: #fff;
+        &:hover {
+          cursor: pointer;
+          background-color: #fff;
+          color: black;
+        }
+      }
     }
   }
 }
