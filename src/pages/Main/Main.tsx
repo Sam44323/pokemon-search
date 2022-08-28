@@ -11,12 +11,26 @@ import {
 } from "@chakra-ui/react";
 
 import styles from "./Main.module.scss";
+import PokemonList from "../../data/pokemondata.json";
 
 const Main: React.FC = () => {
   const [searchInput, setSearchInput] = React.useState<string>("");
   const [suggestedData, setSuggestedData] = React.useState<
     { name: string; url: string }[]
   >([]);
+
+  const handleSearchInput = (value: string) => {
+    setSearchInput(value);
+    let filteredData: { name: string; url: string }[] = [];
+    if (value === "") {
+      filteredData = [];
+    } else {
+      filteredData = PokemonList.results.filter((item) =>
+        item.name.toLowerCase().includes(value.toLowerCase())
+      );
+    }
+    setSuggestedData(filteredData);
+  };
 
   const handleSearch = () => {};
 
@@ -30,7 +44,7 @@ const Main: React.FC = () => {
               type="text"
               placeholder="pokemon name"
               value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
+              onChange={(e) => handleSearchInput(e.target.value)}
             />
           </InputGroup>
           <Button
@@ -42,7 +56,21 @@ const Main: React.FC = () => {
             Search
           </Button>
         </div>
-        {true && <div className={styles.SuggestionModals}></div>}
+        {suggestedData.length > 0 && (
+          <div className={styles.SuggestionModals}>
+            {suggestedData.map((item, index) => (
+              <p
+                key={index}
+                onClick={() => {
+                  setSearchInput(item.name);
+                  setSuggestedData([]);
+                }}
+              >
+                {item.name}
+              </p>
+            ))}
+          </div>
+        )}
       </section>
       <section className={styles.PokemonContainer}></section>
     </div>
