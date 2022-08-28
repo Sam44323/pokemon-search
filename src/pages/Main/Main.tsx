@@ -81,18 +81,12 @@ const Main: React.FC = () => {
       isClosable: true,
     });
     fetchPokeData();
-  }, []);
+  }, [pageData.currPage]);
 
   console.log(resultData);
 
   const handleSearch = async () => {
     if (searchInput === "") {
-      toast({
-        title: "Please enter a valid pokemon name",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      });
       fetchPokeData();
       return;
     }
@@ -119,7 +113,19 @@ const Main: React.FC = () => {
     }
   };
 
-  console.log(resultData);
+  const pageDataHandler = (value: "prev" | "next") => {
+    if (value === "prev") {
+      if (pageData.currPage === 1) {
+        return;
+      }
+      setPageData((prev) => ({ ...prev, currPage: prev.currPage - 1 }));
+    } else {
+      if (pageData.currPage === pageData.totalPage) {
+        return;
+      }
+      setPageData((prev) => ({ ...prev, currPage: prev.currPage + 1 }));
+    }
+  };
 
   return (
     <div className={styles.MainContainer}>
@@ -177,11 +183,25 @@ const Main: React.FC = () => {
         <></>
       )}
       <section className={styles.PaginationContainer}>
-        <button className={styles.PageButton}> Prev </button>
+        <button
+          className={styles.PageButton}
+          onClick={() => pageDataHandler("prev")}
+          disabled={pageData.currPage === 1}
+        >
+          {" "}
+          Prev{" "}
+        </button>
         <p>
           Page {pageData.currPage} of {pageData.totalPage}
         </p>
-        <button className={styles.PageButton}> Next </button>
+        <button
+          className={styles.PageButton}
+          onClick={() => pageDataHandler("next")}
+          disabled={pageData.currPage === pageData.totalPage}
+        >
+          {" "}
+          Next{" "}
+        </button>
       </section>
     </div>
   );
