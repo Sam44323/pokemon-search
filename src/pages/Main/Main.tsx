@@ -12,9 +12,18 @@ import {
 
 import styles from "./Main.module.scss";
 import PokemonList from "../../data/pokemondata.json";
+import axios from "../../axios.config";
 
 const Main: React.FC = () => {
   const [searchInput, setSearchInput] = React.useState<string>("");
+  const [resultData, setResultData] = React.useState<[]>([]);
+  const [pageData, setPageData] = React.useState<{
+    currPage: number;
+    totalPage: number;
+  }>({
+    currPage: 1,
+    totalPage: 1,
+  });
   const [suggestionLoader, setSuggestionLoader] =
     React.useState<boolean>(false);
   const toast = useToast();
@@ -36,6 +45,14 @@ const Main: React.FC = () => {
     setSuggestedData(filteredData);
     setSuggestionLoader(false);
   };
+
+  React.useEffect(() => {
+    const fetchPokeData = async () => {
+      const { data } = await axios.get("?limit=20&offset=0");
+      console.log(data);
+    };
+    fetchPokeData();
+  }, []);
 
   const handleSearch = () => {};
 
@@ -61,7 +78,7 @@ const Main: React.FC = () => {
             Search
           </Button>
         </div>
-        {suggestedData.length > 0 && (
+        {suggestedData.length > 0 ? (
           <div className={styles.SuggestionModals}>
             {suggestionLoader && <Spinner color="white" />}
             {suggestedData.map((item, index) => (
@@ -76,9 +93,18 @@ const Main: React.FC = () => {
               </p>
             ))}
           </div>
+        ) : (
+          <></>
         )}
       </section>
       <section className={styles.PokemonContainer}></section>
+      <section className={styles.PaginationContainer}>
+        <button className={styles.PageButton}> Prev </button>
+        <p>
+          Page {pageData.currPage} of {pageData.totalPage}
+        </p>
+        <button className={styles.PageButton}> Next </button>
+      </section>
     </div>
   );
 };
