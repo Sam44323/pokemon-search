@@ -47,14 +47,49 @@ const Main: React.FC = () => {
   };
 
   React.useEffect(() => {
+    toast({
+      title: "Fetching all the pokemon datas!",
+      status: "loading",
+      position: "top",
+      isClosable: true,
+    });
     const fetchPokeData = async () => {
-      const { data } = await axios.get("?limit=20&offset=0");
-      console.log(data);
+      try {
+        const {
+          data: { results },
+        } = await axios.get("?limit=10&offset=0");
+        const resultData = await Promise.all(
+          results.map(async (_: any, index: number) =>
+            axios.get("/" + (index + 1 + (pageData.currPage - 1) * 10) + "/")
+          )
+        );
+        console.log(resultData);
+        setResultData(results);
+        toast.closeAll();
+      } catch (err) {
+        console.log(err);
+        toast.closeAll();
+        toast({
+          title: "Error while fetching data, please try again!",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     };
     fetchPokeData();
   }, []);
 
-  const handleSearch = () => {};
+  const handleSearch = () => {
+    if (searchInput === "") {
+      toast({
+        title: "Please enter a valid pokemon name",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <div className={styles.MainContainer}>
