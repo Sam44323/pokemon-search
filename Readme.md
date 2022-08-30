@@ -54,7 +54,7 @@ yarn
 **Running the dev-server**
 
 ```bash
-yarn dev
+yarn dev or npm run start
 ```
 
 ---
